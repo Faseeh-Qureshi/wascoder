@@ -1,0 +1,93 @@
+body {
+  background-color: #1c1f26; /* Dark background for royal theme */
+  color: #c0c5ce; /* Light grey text */
+}
+
+.chat-container {
+  background-color: #292d36; /* Darker background for chat bubbles */
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 15px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+}
+
+.prompt-input {
+  background-color: #33373e; /* Lighter grey for input */
+  color: #e1e1e1; /* Light grey text for visibility */
+  border: 1px solid #4b4f57; /* Border for input */
+  padding: 12px;
+  border-radius: 6px;
+  font-size: 16px;
+  width: 100%;
+}
+
+.prompt-input::placeholder {
+  color: #8a8e99; /* Placeholder color */
+}
+
+button {
+  background-color: #4169e1; /* Royal blue for buttons */
+  color: #fff;
+  border: none;
+  padding: 10px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #3a5fc0;
+}
+
+.code-block {
+  background-color: #21252b; /* Dark background for code block */
+  color: #d4d4d4; /* Text color for code */
+  padding: 15px;
+  border-radius: 8px;
+  overflow-x: auto;
+  white-space: pre-wrap;
+}
+
+.highlight-keyword {
+  color: #c586c0;
+}
+
+.highlight-string {
+  color: #ce9178;
+}
+
+.loader {
+  border: 6px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 4px solid #3498db;
+  width: 25px;
+  height: 25px;
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.typewriter {
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  border-right: 3px solid;
+  animation: typing 3.5s steps(40, end), blink-caret 0.75s step-end infinite;
+}
+
+@keyframes typing {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+@keyframes blink-caret {
+  from, to { border-color: transparent; }
+  50% { border-color: #c0c5ce; }
+}
