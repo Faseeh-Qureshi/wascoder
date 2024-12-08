@@ -20,9 +20,9 @@ const CodeGenerator = () => {
   const [loadingMessage, setLoadingMessage] = useState('');
   const conversationEndRef = useRef(null);
   const recognitionRef = useRef(null);
+  const messageTimeoutRef = useRef(null);
   const [recordingDuration, setRecordingDuration] = useState(0);
   const recordingIntervalRef = useRef(null);
-  const messageTimeoutRef = useRef(null);
 
   useEffect(() => {
     if ('webkitSpeechRecognition' in window) {
@@ -80,7 +80,10 @@ const CodeGenerator = () => {
       }, duration);
     };
 
-    showMessage("Generating code... Please wait.", 30000);
+    // Delay the first message by 30 seconds
+    messageTimeoutRef.current = setTimeout(() => {
+      showMessage("Generating code... Please wait.", 30000);
+    }, 30000);
 
     try {
       const response = await axios.post('http://localhost:3000/generate-text', { prompt });
@@ -102,6 +105,7 @@ const CodeGenerator = () => {
     clearTimeout(messageTimeoutRef.current);
     setLoadingMessage('');
   };
+
 
   const handleSpeechToggle = () => {
     const recognition = recognitionRef.current;
@@ -165,22 +169,23 @@ const CodeGenerator = () => {
 
   return (
     <Container sx={{ mt: 4 }} className="container">
-      <Typography variant="h4" align="center" gutterBottom className="header">AI Code Assistant</Typography>
+      <Typography variant="h4" align="center" gutterBottom className="header">Wascoder</Typography>
 
       <Box sx={{ height: '50vh', overflowY: 'auto', mb: 3 }} className="chat-container">
+
         {conversationHistory.map((block, index) => (
           <Paper key={index} sx={{ p: 3, mb: 2, backgroundColor: '#2A2A2A' }} className="response-container">
-            <Typography variant="body1" className="prompt-text" sx={{ color: '#B3B3B3' }}><strong>Prompt:</strong> {block.prompt}</Typography>
+            <Typography variant="body1" className="prompt-text" sx={{ color: '#E0E0E0' }}><strong>Prompt:</strong> {block.prompt}</Typography>
             <pre className="code-block">
               <code className={getLanguageClass(block.language || 'javascript')}>
                 {block.code}
               </code>
             </pre>
             <CopyToClipboard text={block.code}>
-              <Button variant="contained" color="secondary" sx={{ mt: 1 }}>Copy</Button>
+              <Button variant="contained" color="primary" sx={{ mt: 1 }}>Copy</Button>
             </CopyToClipboard>
             <Button variant="outlined" sx={{ mt: 1, ml: 1 }} onClick={() => handleRegenerate(index)}>Regenerate</Button>
-            <Button variant="outlined" sx={{ mt: 1, ml: 1 }} onClick={() => handleEditPrompt(index)} startIcon={<CustomEditIcon />} color="primary">
+            <Button variant="outlined" sx={{ mt: 1, ml: 1, mr:1 }} onClick={() => handleEditPrompt(index)} endIcon={<CustomEditIcon />} color="primary">
               Edit
             </Button>
           </Paper>
@@ -221,12 +226,12 @@ const CodeGenerator = () => {
         />
         
         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-          <IconButton onClick={handleSpeechToggle} sx={{ mb: 1 }}>
+        <IconButton onClick={handleSpeechToggle} sx={{ mb: 1 }}>
             {listening ? <StopCircleIcon sx={{ color: '#E53935' }} /> : <KeyboardVoiceIcon sx={{ color: '#4A90E2' }} />}
           </IconButton>
           {listening && (
             <Typography variant="body2" sx={{ color: '#B3B3B3' }}>
-               {recordingDuration} seconds
+               {recordingDuration} sec
             </Typography>
           )}
 
@@ -245,7 +250,11 @@ const CodeGenerator = () => {
           <Typography sx={{ color: '#B3B3B3' }}>{loadingMessage}</Typography>
         </Paper>
       )}
-      {error && <Typography color="error" sx={{ mt: 2 }}>{error}</Typography>}
+      {error && (
+        <Paper sx={{ p: 2, mb: 2, backgroundColor: '#FFCCCB', borderRadius: 2 }}>
+          <Typography color="error">{error}</Typography>
+        </Paper>
+      )}
     </Container>
   );
 };
